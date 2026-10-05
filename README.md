@@ -21,7 +21,7 @@
 
 ## What This Does
 
-<!-- Three or four sentences: what a user asks for, and what they get back. -->
+FitFindr is a command-line thrifting agent. You describe what you want in plain language — `python app.py ask 'vintage graphic tee under $30, size M'` — and it pulls the description, size and price ceiling out of the sentence, searches 40 secondhand listings, and picks the best match. It then suggests one or two outfits built around that item from the pieces in your wardrobe, and writes a short caption for the find that mentions its price and platform. If nothing matches, it stops after the search and tells you which part of the request to change instead of styling an item that doesn't exist.
 
 ---
 
@@ -112,14 +112,14 @@ $ python -c "from tools import create_fit_card; from utils.data_loader import lo
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
+- *What I asked for:* I had Claude read the Unit 3 brief and the starter's `tools.py` docstrings and build the three tools from them.
+- *What came back:* A `search_listings` that matches sizes on whole tokens instead of substrings (so `"S"` doesn't match `"US 9"`), weights keyword hits by field (title 3, style tags 2, everything else 1), and only keeps a listing that contains at least half of the query's keywords. `suggest_outfit` and `create_fit_card` each build one prompt and call `generate()`, with a fixed fallback string if the model returns nothing.
 - *What I changed:*
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
+- *What I asked for:* I had Claude wire `agent.py::run_agent` to the branch rule in the Planning Loop section above.
+- *What came back:* A loop that re-reads the session on each pass and runs the first missing step, with the empty-search branch returning early. Its first version changed the starter's `search_results` default from `[]` to `None` to mark "search hasn't run yet"; it then put `[]` back and added a separate `searched` flag, because `run_eval.py` reads `search_results` and expects the starter's session shape. It also added a `tool_calls` list to the session and an empty-search message that re-runs the search with one filter removed to name the filter in the way.
 - *What I changed:*
 
 <!-- ═══════════════════════ UNIT 4 — THE TEST ═══════════════════════
